@@ -1,0 +1,31 @@
+{
+  "name": "roomsheet-studio",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run client:bundle && vite --config apps/studio/vite.config.ts",
+    "build": "npm run client:bundle && tsc --noEmit && vite build --config apps/studio/vite.config.ts",
+    "client:bundle": "node scripts/bundle-client.mjs",
+    "demo:client": "npm run client:bundle && node scripts/build-demo-client.mjs",
+    "test": "vitest run",
+    "client:audit": "node scripts/audit-client.mjs",
+    "client:verify": "node scripts/verify-client-browser.mjs",
+    "spike:build": "node spikes/delivery/build.mjs",
+    "spike:serve": "python3 -m http.server 4173 --directory spikes/delivery/dist"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/three": "0.160.0",
+    "esbuild": "^0.28.2",
+    "playwright-core": "^1.65.1",
+    "typescript": "5.7.3",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  },
+  "dependencies": {
+    "three": "0.160.1"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@roomsheet/studio",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite" },
+  "dependencies": {
+    "@roomsheet/room-model": "0.0.0",
+    "@roomsheet/viewer": "0.0.0"
+  }
+}

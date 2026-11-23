@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>RoomSheet Studio</title>
+</head>
+<body>
+  <main class="app">
+    <div class="stage" id="stage"><span class="stage-badge" id="room-label">Dimensiuni estimate</span></div>
+    <aside class="panel">
+      <header><span class="eyebrow">RoomSheet Studio · M-DEMO</span><h1>Dormitorul nou</h1><p>Previzualizare locală în camera măsurată</p></header>
+      <section><h2>Proiecte</h2>
+        <label class="project-name">Nume proiect<input id="project-name" value="Dormitorul nou" maxlength="80"></label>
+        <div class="buttons"><button id="new-project" type="button">Proiect nou</button><button id="save-project" type="button">Salvează proiectul</button></div>
+        <label class="project-name">Deschide proiect<select id="project-list"><option value="">Alege un proiect salvat</option></select></label>
+        <p class="hint" id="save-status">Proiectele se salvează local în browser.</p>
+      </section>
+      <section><h2>Camera</h2>
+        <label class="file-button">Importă scanarea RoomPlan<input id="scan" type="file" accept=".json,application/json"></label>
+        <p class="hint">Scanarea incompletă este refuzată, cu motivul afișat aici.</p>
+        <div class="error" id="error" hidden></div>
+        <div class="dims">
+          <label>Lățime (mm)<input id="width" type="number" value="2840" min="1500"></label>
+          <label>Lungime (mm)<input id="length" type="number" value="4005" min="1500"></label>
+          <label>Tavan (mm)<input id="height" type="number" value="2632" min="2000"></label>
+        </div>
+        <div class="dims">
+          <label>Arcadă de la colț (mm)<input id="arch-offset" type="number" value="738" min="0"></label>
+          <label>Arcadă lățime (mm)<input id="arch-width" type="number" value="1310" min="1"></label>
+          <label>Ușă de la colț (mm)<input id="door-offset" type="number" value="1934" min="0"></label>
+          <label>Ușă lățime (mm)<input id="door-width" type="number" value="824" min="1"></label>
+        </div>
+        <div id="plan" class="plan" aria-label="Planul camerei văzut de sus"></div>
+        <button id="manual">Aplică măsurătorile</button>
+        <div class="feature-editor"><h3>Cote de control cu ruleta</h3><div class="dims"><label>Lățime măsurată (mm)<input id="tape-width" type="number" min="1" placeholder="opțional"></label><label>Lungime măsurată (mm)<input id="tape-length" type="number" min="1" placeholder="opțional"></label><label>Toleranță (mm)<input id="tape-tolerance" type="number" min="0" value="10"></label></div><button id="compare-tape" type="button">Compară cu camera</button><div id="measurement-diffs" class="checks" aria-live="polite"></div></div>
+        <div class="feature-editor">
+          <h3>Element pe perete</h3>
+          <div class="dims">
+            <label>Tip<select id="feature-kind"><option value="window">Fereastră</option><option value="door">Ușă</option><option value="arch">Arcadă / gol</option><option value="niche">Nișă</option><option value="radiator">Calorifer</option><option value="ac">Aparat AC</option><option value="pipe">Țeavă</option><option value="socket">Priză</option><option value="switch">Întrerupător</option></select></label>
+            <label>Perete<select id="feature-wall"><option value="arch">Arcadă</option><option value="tv">TV</option><option value="door">Ușă</option><option value="bed">Pat</option></select></label>
+            <label>De la colț (mm)<input id="feature-offset" type="number" value="400" min="0"></label>
+            <label>Lățime (mm)<input id="feature-width" type="number" value="500" min="1"></label>
+            <label>De la podea (mm)<input id="feature-bottom" type="number" value="900" min="0"></label>
+            <label>Înălțime (mm)<input id="feature-height" type="number" value="600" min="1"></label>
+            <label>Adâncime (mm)<input id="feature-depth" type="number" value="0" min="0"></label>
+          </div>
+          <button id="add-feature" type="button">Adaugă pe perete</button>
+          <div id="feature-list" class="feature-list" aria-live="polite"></div>
+        </div>
+      </section>
+      <section><h2>Mobilă</h2><button id="samples">Încarcă mostrele comenzii</button><p class="hint">Dulap, pat, două noptiere și masă de toaletă. Comoda nu face parte din comandă. Lățimile coloanelor dulapului și numărul compartimentelor lăzii sunt ilustrative (sursă: inferență).</p><div id="furniture-list" class="furniture-list"></div><label class="project-name">Ușile glisante ale dulapului<select id="wardrobe-door"><option value="closed">Închise</option><option value="left">Deschide stânga · umeraș și sertare</option><option value="right">Deschide dreapta · rafturi</option></select></label><label class="toggle"><input id="bed-lift" type="checkbox"> Ridică somiera și arată lada patului</label></section>
+      <section><h2>Vedere</h2><div class="buttons"><button data-view="top">De sus</button><button data-view="door">Din ușă</button><button data-view="bed">Din pat</button><button data-view="wardrobe">Spre dulap</button><button data-view="mirror">Spre oglindă</button></div><p class="hint">Trage scena pentru rotire. Apropie cu două degete pe telefon sau cu rotița mouse-ului.</p></section>
+      <section><h2>Culori</h2><div class="dims"><label>Pereți<select id="wall-color"><option value="#ddd6ca">Nisipiu</option><option value="#f0ede6">Alb cald</option><option value="#c4c9c2">Verde pal</option><option value="#b8b5b0">Gri cald</option></select></label><label>Tavan<select id="ceiling-color"><option value="#f4f1eb">Alb cald</option><option value="#ffffff">Alb</option><option value="#e2dfd8">Gri deschis</option></select></label></div></section>
+      <section><h2>Lumină</h2><div class="dims"><label>Ora<select id="hour"><option value="15">15:00</option></select></label><label>Anotimp<select id="season"><option value="summer">Vară</option><option value="winter">Iarnă</option></select></label><label>Fereastra dă spre<select id="facing"><option value="N">Nord</option><option value="NE">Nord-est</option><option value="E">Est</option><option value="SE">Sud-est</option><option value="S" selected>Sud</option><option value="SW">Sud-vest</option><option value="W">Vest</option><option value="NW">Nord-vest</option></select></label><label>Cer<select id="sky"><option value="clear">Senin</option><option value="overcast">Înnorat</option></select></label><label>Lustra<select id="lamp"><option value="auto">Automat</option><option value="on">Aprinsă</option><option value="off">Stinsă</option></select></label><label>Becuri<select id="kelvin"><option value="2700">Cald 2700 K</option><option value="3000" selected>Cald-alb 3000 K</option><option value="4000">Neutru 4000 K</option><option value="6500">Rece 6500 K</option></select></label></div><label class="toggle"><input id="led" type="checkbox"> LED-urile oglinzii aprinse</label><p class="hint" id="sun-info"></p></section>
+      <section><h2>Verificări</h2><label class="project-name">Balamaua ușii (verificare estimată)<select id="hinge"><option value="left">Stânga</option><option value="right">Dreapta</option></select></label><div id="checks" class="checks"></div></section>
+      <section><h2>Client</h2><button id="export-client" type="button">Descarcă pagina client</button><p id="client-export-status" class="hint">Fișier HTML autonom, pregătit pentru încărcare pe găzduire statică. Rezultatele pe telefoane sunt încă netestate.</p></section>
+    </aside>
+  </main>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

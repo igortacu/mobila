@@ -1,0 +1,118 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`real scan fixtures > imports the full scan into the clean golden dimensions 1`] = `
+{
+  "alcoveDepthMm": 674,
+  "axisRotationRad": 0.07125544303899334,
+  "contour": [
+    {
+      "x": 0,
+      "z": 0,
+    },
+    {
+      "x": 2840,
+      "z": 0,
+    },
+    {
+      "x": 2840,
+      "z": 4005,
+    },
+    {
+      "x": 0,
+      "z": 4005,
+    },
+  ],
+  "geometryWarnings": [],
+  "heightMm": 2632,
+  "lengthMm": 4005,
+  "measurementStatus": "measured",
+  "openings": [
+    {
+      "heightMm": 2300,
+      "id": "arch-opening",
+      "kind": "arch",
+      "offsetMm": 738,
+      "sillMm": 0,
+      "wallId": "arch",
+      "widthMm": 1310,
+    },
+    {
+      "heightMm": 2114,
+      "id": "door-opening",
+      "kind": "door",
+      "offsetMm": 1934,
+      "sillMm": 0,
+      "wallId": "door",
+      "widthMm": 824,
+    },
+    {
+      "heightMm": 1482,
+      "id": "window-opening",
+      "kind": "window",
+      "offsetMm": 563,
+      "sillMm": 1106,
+      "wallId": "window",
+      "widthMm": 1718,
+    },
+  ],
+  "walls": [
+    {
+      "end": {
+        "x": 2840,
+        "z": 0,
+      },
+      "heightMm": 2632,
+      "id": "arch",
+      "mountedItems": [],
+      "start": {
+        "x": 0,
+        "z": 0,
+      },
+      "thicknessMm": 336,
+    },
+    {
+      "end": {
+        "x": 2840,
+        "z": 4005,
+      },
+      "heightMm": 2632,
+      "id": "tv",
+      "mountedItems": [],
+      "start": {
+        "x": 2840,
+        "z": 0,
+      },
+      "thicknessMm": 120,
+    },
+    {
+      "end": {
+        "x": 2840,
+        "z": 4005,
+      },
+      "heightMm": 2632,
+      "id": "door",
+      "mountedItems": [],
+      "start": {
+        "x": 0,
+        "z": 4005,
+      },
+      "thicknessMm": 120,
+    },
+    {
+      "end": {
+        "x": 0,
+        "z": 0,
+      },
+      "heightMm": 2632,
+      "id": "bed",
+      "mountedItems": [],
+      "start": {
+        "x": 0,
+        "z": 4005,
+      },
+      "thicknessMm": 120,
+    },
+  ],
+  "widthMm": 2840,
+}
+`;

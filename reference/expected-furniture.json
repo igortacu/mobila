@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "units": "mm",
+  "source": "manual transcription supplied by the user from the firm's sketches",
+  "pieces": [
+    {
+      "id": "wardrobe",
+      "status": "ordered",
+      "quantity": 1,
+      "dimensions": { "width": 1700, "depth": 600, "height": 2500, "carcassHeight": 2420, "legHeight": 80, "source": "read" },
+      "materials": { "carcass": "PAL H1710 ST10", "fronts": ["MDF P017", "mirror"] },
+      "doors": { "kind": "sliding", "count": 2 },
+      "leftSection": { "innerWidth": 500, "topShelfClearance": 350, "hangingRailClearance": 1303, "drawers": 4, "drawerZoneHeight": 700, "source": "read" },
+      "shelfColumns": { "count": 2, "compartmentHeightsFromTop": [384, 382, 382, 382, 382, 382], "source": "read" },
+      "inferred": ["panelThickness", "middleAndRightColumnWidths"]
+    },
+    {
+      "id": "bed",
+      "status": "ordered",
+      "quantity": 1,
+      "dimensions": { "width": 1846, "length": 2046, "legHeight": 80, "headboardHeightAboveLegs": 850, "frameHeight": 320, "storageInnerWidth": 1810, "source": "read" },
+      "upholstery": "P017 tone",
+      "features": ["lift-up slatted base", "divided storage box"],
+      "inferred": ["mattressSize", "headboardThickness", "storageCompartmentCount"]
+    },
+    {
+      "id": "nightstand",
+      "status": "ordered",
+      "quantity": 2,
+      "dimensions": { "width": 400, "depth": 400, "height": 500, "legHeight": 80, "source": "read" },
+      "drawers": 2,
+      "materials": { "carcass": "PAL H1710 ST10", "top": "MDF P017", "fronts": "MDF P017" }
+    },
+    {
+      "id": "vanity",
+      "status": "ordered",
+      "quantity": 1,
+      "dimensions": { "width": 770, "depth": 400, "height": 1450, "mirrorSectionWidth": 620, "shelfColumnWidth": 150, "source": "read" },
+      "base": { "height": 200, "bodyHeight": 182, "topThickness": 18, "drawers": 2 },
+      "mirror": { "height": 1250, "frameThickness": 8, "lighting": "LED on both vertical sides" },
+      "shelfColumn": { "height": 1250, "shelves": 3 },
+      "inferred": ["materials"]
+    },
+    {
+      "id": "dresser",
+      "status": "removed from order; evaluation only",
+      "quantity": 0,
+      "dimensions": { "width": 1000, "depth": 400, "height": 750, "source": "read" },
+      "drawers": { "count": 4, "layout": "2 x 2" },
+      "material": "PAL K101 PE",
+      "inferred": ["legHeight", "drawerHeights"]
+    }
+  ]
+}
