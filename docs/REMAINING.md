@@ -4,6 +4,7 @@ Pagina pentru prezentarea din 24 noiembrie este disponibilă și verificată loc
 
 | Lucrare | Ce lipsește pentru acceptare |
 | --- | --- |
+| **Poziția patului în demo** | Utilizatorul a semnalat că este greșită. Poziția X=1400 mm, Z=1550 mm, rotire 0° este o valoare demonstrativă în Studio și export; trebuie confirmată, corectată și republicată. |
 | Import OBJ+MTL PRO100, maparea materialelor, apoi GLB | Un export real PRO100 cu materialele și texturile asociate. M-DEMO folosește mostrele parametrice; importul real nu este prezentat drept funcțional. |
 | Import și evaluare din schițe | Imaginile originale `IMG_1683…1691` și un rezultat real verificabil. `reference/expected-furniture.json` conține doar transcrierea manuală furnizată. |
 | Testul de livrare în mesagerie | Deschiderea linkului și a HTML-ului atașat în Telegram, Viber și WhatsApp pe iOS și Android, cu WebGL și rotire verificată. Matricea rămâne „Netestat” în `docs/DELIVERY.md`. |

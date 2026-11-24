@@ -2,6 +2,8 @@
 
 Acesta este registrul criteriilor de acceptare. „Parțial” nu înseamnă trecut; verificarea finală se face după implementarea modulelor respective. Golden file-ul RoomPlan verifică regresia rezultatului, nu precizia scanării în camera reală.
 
+**Problemă semnalată de utilizator la 24 noiembrie:** patul este amplasat greșit în scena demo și în pagina publică. Testele pentru somiera rabatabilă verifică mecanismul demonstrativ, nu validează poziția patului. Detalii și pașii de corectare: [STATUS.md](STATUS.md).
+
 | Criteriu | Test sau verificare | Stare |
 | --- | --- | --- |
 | AC1 | `apps/studio/src/roomplan/index.test.ts`: fixture complet, snapshot, dimensiuni ±10 mm, un singur gol de arcadă. Import în browser: eticheta „Scanare RoomPlan”, avertismentul de 22 mm și zero erori în consola capturată. | Trecut pentru fixture-ul primit; Playwright repetă fluxul la poarta QA finală. |

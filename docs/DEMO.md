@@ -1,5 +1,7 @@
 # Parcursul demonstrației M-DEMO
 
+> **Problemă cunoscută:** patul este amplasat greșit în scenă. Mecanismul de ridicare este demonstrativ; plasamentul nu este aprobat. Vezi [STATUS.md](STATUS.md).
+
 ![Dulapul deschis în pagina găzduită](client-live.jpg)
 
 ![Somiera ridicată și lada patului](client-bed-open.jpg)

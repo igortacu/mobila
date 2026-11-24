@@ -1,5 +1,7 @@
 # Prezentarea din 24 noiembrie 2026
 
+> **Problemă cunoscută:** poziția patului în cameră este greșită și nu a fost aprobată. Pagina de mai jos demonstrează ridicarea somierei, dar nu reprezintă un plan corect de amplasare. Vezi [STATUS.md](STATUS.md).
+
 ![Dulapul deschis în pagina găzduită](client-live.jpg)
 
 ![Patul ridicat cu lada de depozitare vizibilă](client-bed-open.jpg)
