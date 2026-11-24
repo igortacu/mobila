@@ -11,6 +11,7 @@ it('exports only viewer data and precomputed sunlight', () => {
     room: { ...room, metadata: { gps: 'secret-location' } } as typeof room,
     furniture: [{ id: 'bed', kind: 'bed', xMm: 1400, zMm: 1550, rotationRad: 0 }],
     lighting: { hour: 15, season: 'summer', facing: 'S', sky: 'clear' },
+    finishes: { walls: 'satin', floor: 'walnut' },
     furnitureState: { wardrobeDoor: 'left', bedLifted: true },
     updatedAt: 0,
   };
@@ -18,6 +19,7 @@ it('exports only viewer data and precomputed sunlight', () => {
   expect(payload.sunDirections.summer).toHaveLength(19);
   expect(payload.sunDirections.winter).toHaveLength(19);
   expect(payload.furnitureState).toEqual({ wardrobeDoor: 'left', bedLifted: true });
+  expect(payload.finishes).toEqual({ walls: 'satin', floor: 'walnut' });
   expect(JSON.stringify(payload)).not.toMatch(/gps|secret-location|controlMeasurements|47\.02|28\.86/);
   expect(payload.room.measurementStatus).toBe('estimated');
 });

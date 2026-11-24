@@ -17,6 +17,7 @@ const project: StudioProject = {
   ],
   lighting: { hour: 15, season: 'summer', facing: 'S', sky: 'clear', lamp: 'auto', kelvin: 3000, led: false },
   colors: { walls: '#ddd6ca', ceiling: '#f4f1eb' },
+  finishes: { walls: 'matte', floor: 'oak' },
   furnitureState: { wardrobeDoor: 'closed', bedLifted: false },
   updatedAt: Date.now(),
 };

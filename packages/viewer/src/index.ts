@@ -16,6 +16,9 @@ export interface SunDirection {
   altitudeDeg: number;
 }
 
+export type WallFinish = 'matte' | 'satin' | 'pearl' | 'metallic' | 'chameleon' | 'velvet' | 'marmorino' | 'microcement';
+export type FloorFinish = 'oak' | 'walnut' | 'tile' | 'concrete';
+
 export interface Viewer {
   setRoom(room: RoomModel): void;
   setFurniture(pieces: FurniturePlacement[]): void;
@@ -23,6 +26,7 @@ export interface Viewer {
   setLamps(mode: 'auto' | 'on' | 'off', kelvin: 2700 | 3000 | 4000 | 6500, mirrorLed: boolean, altitudeDeg: number): void;
   setView(view: 'top' | 'door' | 'bed' | 'wardrobe' | 'mirror'): void;
   setSurfaceColors(walls: string, ceiling: string): void;
+  setFinishes(walls: WallFinish, floor: FloorFinish): void;
   setWardrobeDoor(state: 'closed' | 'left' | 'right'): void;
   setBedLift(lifted: boolean): void;
   dispose(): void;
@@ -71,6 +75,7 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
   const wallMaterial = new THREE.MeshStandardMaterial({ color: '#ddd6ca', roughness: 0.9, side: THREE.DoubleSide, transparent: true, opacity: 0.86 });
   const ceilingMaterial = new THREE.MeshStandardMaterial({ color: '#f4f1eb', side: THREE.DoubleSide });
   const floorMaterial = new THREE.MeshStandardMaterial({ color: '#bca98d', roughness: 0.82 });
+  const floorTextures = new Map<FloorFinish, THREE.CanvasTexture>();
   const oak = new THREE.MeshStandardMaterial({ color: '#a77d57', roughness: 0.8 });
   const taupe = new THREE.MeshStandardMaterial({ color: '#AA9D8C', roughness: 0.64 });
   const mirror = new THREE.MeshStandardMaterial({ color: '#b6c0c2', roughness: 0.08, metalness: 0.72 });
@@ -284,6 +289,74 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
     render();
   }
 
+  function floorTexture(kind: FloorFinish): THREE.CanvasTexture {
+    const cached = floorTextures.get(kind);
+    if (cached) return cached;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 256;
+    const context = canvas.getContext('2d')!;
+    const colors = { oak: ['#c8a77d', '#b8946c'], walnut: ['#8a6549', '#76543d'], tile: ['#d7d1c4', '#c7c2b7'], concrete: ['#aeb0a9', '#a4a9a5'] }[kind];
+    context.fillStyle = colors[0];
+    context.fillRect(0, 0, 256, 256);
+    if (kind === 'oak' || kind === 'walnut') {
+      for (let index = 0; index < 8; index++) {
+        const x = index * 32;
+        context.fillStyle = index % 2 ? colors[1] : colors[0];
+        context.fillRect(x, 0, 31, 256);
+        context.strokeStyle = 'rgba(49,35,23,.23)';
+        context.lineWidth = 1;
+        context.strokeRect(x + .5, .5, 31, 255);
+        for (let vein = 0; vein < 5; vein++) {
+          context.beginPath();
+          context.moveTo(x + 5 + vein * 5, 0);
+          context.bezierCurveTo(x + 2 + vein * 5, 70, x + 9 + vein * 5, 150, x + 4 + vein * 5, 256);
+          context.strokeStyle = 'rgba(65,44,28,.13)';
+          context.stroke();
+        }
+      }
+    } else if (kind === 'tile') {
+      context.strokeStyle = '#a4a19a';
+      context.lineWidth = 3;
+      for (let coordinate = 0; coordinate <= 256; coordinate += 64) {
+        context.beginPath(); context.moveTo(coordinate, 0); context.lineTo(coordinate, 256); context.stroke();
+        context.beginPath(); context.moveTo(0, coordinate); context.lineTo(256, coordinate); context.stroke();
+      }
+    } else {
+      for (let index = 0; index < 320; index++) {
+        const x = (index * 73) % 256, y = (index * 151) % 256;
+        context.fillStyle = index % 2 ? 'rgba(255,255,255,.09)' : 'rgba(46,53,48,.07)';
+        context.fillRect(x, y, 2 + index % 5, 2 + index % 3);
+      }
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(kind === 'oak' || kind === 'walnut' ? 3 : 2, 4);
+    texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
+    floorTextures.set(kind, texture);
+    return texture;
+  }
+
+  function setFinishes(walls: WallFinish, floor: FloorFinish): void {
+    const settings: Record<WallFinish, { roughness: number; metalness: number; opacity: number }> = {
+      matte: { roughness: 0.92, metalness: 0, opacity: 0.86 },
+      satin: { roughness: 0.48, metalness: 0, opacity: 0.86 },
+      pearl: { roughness: 0.34, metalness: 0.12, opacity: 0.86 },
+      metallic: { roughness: 0.28, metalness: 0.52, opacity: 0.86 },
+      chameleon: { roughness: 0.27, metalness: 0.36, opacity: 0.78 },
+      velvet: { roughness: 1, metalness: 0, opacity: 0.94 },
+      marmorino: { roughness: 0.58, metalness: 0, opacity: 0.9 },
+      microcement: { roughness: 0.83, metalness: 0, opacity: 0.9 },
+    };
+    Object.assign(wallMaterial, settings[walls]);
+    wallMaterial.needsUpdate = true;
+    floorMaterial.map = floorTexture(floor);
+    floorMaterial.color.set('#ffffff');
+    floorMaterial.roughness = floor === 'tile' ? 0.43 : 0.82;
+    floorMaterial.needsUpdate = true;
+    render();
+  }
+
   const pointers = new Map<number, { x: number; y: number }>();
   renderer.domElement.addEventListener('pointerdown', event => {
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
@@ -335,5 +408,5 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
   const resize = new ResizeObserver(render);
   resize.observe(container);
   buildRoom(initialRoom);
-  return { setRoom: buildRoom, setFurniture, setSun, setLamps, setView, setSurfaceColors, setWardrobeDoor, setBedLift, dispose: () => { resize.disconnect(); renderer.dispose(); renderer.domElement.remove(); } };
+  return { setRoom: buildRoom, setFurniture, setSun, setLamps, setView, setSurfaceColors, setFinishes, setWardrobeDoor, setBedLift, dispose: () => { resize.disconnect(); for (const texture of floorTextures.values()) texture.dispose(); renderer.dispose(); renderer.domElement.remove(); } };
 }

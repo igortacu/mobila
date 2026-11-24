@@ -36,16 +36,20 @@ try {
   await page.locator('#season').selectOption('winter');
   await page.locator('#hour').selectOption('20');
   await page.locator('#wall-color').selectOption('#c4c9c2');
+  await page.locator('#wall-finish').selectOption('satin');
+  await page.locator('#floor-finish').selectOption('walnut');
   const interactive = await page.evaluate(() => ({
     door: document.querySelector('#wardrobe-door')?.value,
     bed: document.querySelector('#bed-lift')?.checked,
     season: document.querySelector('#season')?.value,
     hour: document.querySelector('#hour')?.value,
     walls: document.querySelector('#wall-color')?.value,
+    wallFinish: document.querySelector('#wall-finish')?.value,
+    floorFinish: document.querySelector('#floor-finish')?.value,
   }));
   const report = { file: resolve(file), bytes, browser: await browser.version(), os: `${os.platform()} ${os.release()}`, cpu: os.cpus()[0]?.model, viewport: '390×844', cpuThrottle: '4×', offline: true, canvasReadyMs, ...result, interactive, external, errors };
   console.log(JSON.stringify(report, null, 2));
-  if (bytes > 5_000_000 || result.fcpMs >= 3000 || result.scrollWidth > result.viewportWidth || result.canvasWidth <= 0 || external.length || errors.length || interactive.door !== 'left' || !interactive.bed || interactive.hour !== '20') process.exitCode = 1;
+  if (bytes > 5_000_000 || result.fcpMs >= 3000 || result.scrollWidth > result.viewportWidth || result.canvasWidth <= 0 || external.length || errors.length || interactive.door !== 'left' || !interactive.bed || interactive.hour !== '20' || interactive.wallFinish !== 'satin' || interactive.floorFinish !== 'walnut') process.exitCode = 1;
 } finally {
   await context.close();
   await browser.close();

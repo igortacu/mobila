@@ -12,6 +12,7 @@ viewer.setFurniture(payload.furniture);
 viewer.setWardrobeDoor(payload.furnitureState.wardrobeDoor);
 viewer.setBedLift(payload.furnitureState.bedLifted);
 viewer.setSurfaceColors(payload.colors.walls, payload.colors.ceiling);
+viewer.setFinishes(payload.finishes?.walls ?? 'matte', payload.finishes?.floor ?? 'oak');
 
 const hour = el<HTMLSelectElement>('hour');
 hour.replaceChildren(...Array.from({ length: 19 }, (_, index) => new Option(`${String(index + 5).padStart(2, '0')}:00`, String(index + 5))));
@@ -23,6 +24,8 @@ el<HTMLSelectElement>('kelvin').value = String(payload.lighting.kelvin);
 el<HTMLInputElement>('led').checked = payload.lighting.led;
 el<HTMLSelectElement>('wall-color').value = payload.colors.walls;
 el<HTMLSelectElement>('ceiling-color').value = payload.colors.ceiling;
+el<HTMLSelectElement>('wall-finish').value = payload.finishes?.walls ?? 'matte';
+el<HTMLSelectElement>('floor-finish').value = payload.finishes?.floor ?? 'oak';
 el<HTMLSelectElement>('wardrobe-door').value = payload.furnitureState.wardrobeDoor;
 el<HTMLInputElement>('bed-lift').checked = payload.furnitureState.bedLifted;
 
@@ -35,12 +38,14 @@ function updateLight(): void {
 }
 
 function updateColors(): void { viewer.setSurfaceColors(el<HTMLSelectElement>('wall-color').value, el<HTMLSelectElement>('ceiling-color').value); }
+function updateFinishes(): void { viewer.setFinishes(el<HTMLSelectElement>('wall-finish').value as ClientPayload['finishes']['walls'], el<HTMLSelectElement>('floor-finish').value as ClientPayload['finishes']['floor']); }
 function updateFurniture(): void {
   viewer.setWardrobeDoor(el<HTMLSelectElement>('wardrobe-door').value as 'closed' | 'left' | 'right');
   viewer.setBedLift(el<HTMLInputElement>('bed-lift').checked);
 }
 for (const id of ['hour', 'season', 'sky', 'lamp', 'kelvin', 'led']) el<HTMLElement>(id).addEventListener('change', updateLight);
 for (const id of ['wall-color', 'ceiling-color']) el<HTMLElement>(id).addEventListener('change', updateColors);
+for (const id of ['wall-finish', 'floor-finish']) el<HTMLElement>(id).addEventListener('change', updateFinishes);
 for (const id of ['wardrobe-door', 'bed-lift']) el<HTMLElement>(id).addEventListener('change', updateFurniture);
 document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(button => button.addEventListener('click', () => viewer.setView(button.dataset.view as 'top' | 'door' | 'bed' | 'wardrobe' | 'mirror')));
 updateLight();

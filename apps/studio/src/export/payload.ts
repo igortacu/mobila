@@ -1,5 +1,5 @@
 import type { RoomModel } from '@roomsheet/room-model';
-import type { FurniturePlacement, SunDirection } from '@roomsheet/viewer';
+import type { FloorFinish, FurniturePlacement, SunDirection, WallFinish } from '@roomsheet/viewer';
 import type { StudioProject } from '../app/projects';
 import { sunDirection } from '../lighting/sun';
 
@@ -8,6 +8,7 @@ export interface ClientPayload {
   room: RoomModel;
   furniture: FurniturePlacement[];
   colors: { walls: string; ceiling: string };
+  finishes: { walls: WallFinish; floor: FloorFinish };
   lighting: { hour: number; season: 'summer' | 'winter'; sky: 'clear' | 'overcast'; lamp: 'auto' | 'on' | 'off'; kelvin: 2700 | 3000 | 4000 | 6500; led: boolean };
   furnitureState: { wardrobeDoor: 'closed' | 'left' | 'right'; bedLifted: boolean };
   sunDirections: { summer: SunDirection[]; winter: SunDirection[] };
@@ -36,6 +37,7 @@ export function createClientPayload(project: StudioProject): ClientPayload {
     room,
     furniture: project.furniture.map(item => ({ id: item.id, kind: item.kind, xMm: item.xMm, zMm: item.zMm, rotationRad: item.rotationRad })),
     colors: project.colors ?? { walls: '#ddd6ca', ceiling: '#f4f1eb' },
+    finishes: project.finishes ?? { walls: 'matte', floor: 'oak' },
     lighting: { hour: project.lighting.hour, season: project.lighting.season, sky: project.lighting.sky, lamp: project.lighting.lamp ?? 'auto', kelvin: project.lighting.kelvin ?? 3000, led: project.lighting.led ?? false },
     furnitureState: project.furnitureState ?? { wardrobeDoor: 'closed', bedLifted: false },
     sunDirections,

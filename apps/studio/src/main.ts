@@ -311,6 +311,7 @@ function currentProject(): StudioProject {
     id: currentProjectId ?? crypto.randomUUID(), name, room, furniture,
     lighting: { hour: number('hour'), season: el<HTMLSelectElement>('season').value as 'summer' | 'winter', facing: el<HTMLSelectElement>('facing').value as Facing, sky: el<HTMLSelectElement>('sky').value as 'clear' | 'overcast', lamp: el<HTMLSelectElement>('lamp').value as 'auto' | 'on' | 'off', kelvin: number('kelvin') as 2700 | 3000 | 4000 | 6500, led: el<HTMLInputElement>('led').checked },
     colors: { walls: el<HTMLSelectElement>('wall-color').value, ceiling: el<HTMLSelectElement>('ceiling-color').value },
+    finishes: { walls: el<HTMLSelectElement>('wall-finish').value as NonNullable<StudioProject['finishes']>['walls'], floor: el<HTMLSelectElement>('floor-finish').value as NonNullable<StudioProject['finishes']>['floor'] },
     furnitureState: { wardrobeDoor: el<HTMLSelectElement>('wardrobe-door').value as 'closed' | 'left' | 'right', bedLifted: el<HTMLInputElement>('bed-lift').checked },
     updatedAt: Date.now(),
   };
@@ -363,19 +364,25 @@ el<HTMLSelectElement>('project-list').addEventListener('change', async event => 
   el<HTMLInputElement>('led').checked = project.lighting.led ?? false;
   el<HTMLSelectElement>('wall-color').value = project.colors?.walls ?? '#ddd6ca';
   el<HTMLSelectElement>('ceiling-color').value = project.colors?.ceiling ?? '#f4f1eb';
+  el<HTMLSelectElement>('wall-finish').value = project.finishes?.walls ?? 'matte';
+  el<HTMLSelectElement>('floor-finish').value = project.finishes?.floor ?? 'oak';
   updateColors();
+  updateFinishes();
   updateLight();
   el<HTMLElement>('save-status').textContent = 'Proiect deschis din stocarea locală.';
   showError('');
 });
 document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(button => button.addEventListener('click', () => viewer.setView(button.dataset.view as 'top' | 'door' | 'bed' | 'wardrobe' | 'mirror')));
 function updateColors(): void { viewer.setSurfaceColors(el<HTMLSelectElement>('wall-color').value, el<HTMLSelectElement>('ceiling-color').value); }
+function updateFinishes(): void { viewer.setFinishes(el<HTMLSelectElement>('wall-finish').value as NonNullable<StudioProject['finishes']>['walls'], el<HTMLSelectElement>('floor-finish').value as NonNullable<StudioProject['finishes']>['floor']); }
 for (const id of ['wall-color', 'ceiling-color']) el<HTMLSelectElement>(id).addEventListener('change', updateColors);
+for (const id of ['wall-finish', 'floor-finish']) el<HTMLSelectElement>(id).addEventListener('change', updateFinishes);
 const hourSelect = el<HTMLSelectElement>('hour');
 hourSelect.replaceChildren(...Array.from({ length: 19 }, (_, index) => { const hour = index + 5; return new Option(`${String(hour).padStart(2, '0')}:00`, String(hour)); }));
 hourSelect.value = '15';
 for (const id of ['hour', 'season', 'facing', 'sky', 'lamp', 'kelvin', 'led']) el<HTMLElement>(id).addEventListener('change', updateLight);
 updateLight();
+updateFinishes();
 renderPlan();
 renderFeatures();
 renderMeasurementDiffs();

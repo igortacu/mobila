@@ -1,5 +1,5 @@
 import type { RoomModel, WallAnchor } from '@roomsheet/room-model';
-import type { FurniturePlacement } from '@roomsheet/viewer';
+import type { FloorFinish, FurniturePlacement, WallFinish } from '@roomsheet/viewer';
 
 export type StudioFurniturePlacement = FurniturePlacement & { wallAnchor?: WallAnchor };
 
@@ -10,6 +10,7 @@ export interface StudioProject {
   furniture: StudioFurniturePlacement[];
   lighting: { hour: number; season: 'summer' | 'winter'; facing: 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW'; sky: 'clear' | 'overcast'; lamp?: 'auto' | 'on' | 'off'; kelvin?: 2700 | 3000 | 4000 | 6500; led?: boolean };
   colors?: { walls: string; ceiling: string };
+  finishes?: { walls: WallFinish; floor: FloorFinish };
   furnitureState?: { wardrobeDoor: 'closed' | 'left' | 'right'; bedLifted: boolean };
   updatedAt: number;
 }
