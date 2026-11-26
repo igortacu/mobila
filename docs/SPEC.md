@@ -24,6 +24,8 @@ Toate lungimile persistate, importate și exportate sunt în **mm**; conversia �
 
 Mostrele confirmate din comandă: dulap 1700×600×2500 (corp 2420, picioare 80; glisante MDF P017 și oglindă; secțiune 500 cu raft 350 de sus, bară, 4 sertare în 700; două coloane cu 384 apoi 382 mm); pat 1846×2046 (tăblie 850 peste picioare, cadru 320, picioare 80, ladă și somieră rabatabilă); două noptiere 400×400×500, câte două sertare; masă de toaletă 770×400×1450 (oglindă 620×1250, LED lateral, coloană 150 cu trei rafturi, bază 200 cu două sertare). PAL H1710 ST10 este pentru corpuri, MDF P017 `#AA9D8C` pentru capace și fațade, cu excepția tapițeriei patului în ton P017. Comoda PAL K101 PE este **scoasă din comandă**; apare doar în datele de evaluare, nu în scena inițială. Grosimea de 18 mm, lățimile celor două coloane de dulap, dimensiunea saltelei, grosimea tăbliei, compartimentele lăzii și materialele mesei de toaletă sunt inferențe și se etichetează ca atare.
 
+Revizie de plasament din 26 noiembrie: tăblia patului este pe peretele lateral de lângă dulap, iar camera 3D se rotește orbital în jurul punctului privit. Cererea de ridicare cu 500 mm a „lemnului cu oglinda” este implementată provizoriu pentru masa de toaletă întreagă, prin cota de plasament `elevationMm=500`; nu schimbă dimensiunea piesei de 1450 mm din schiță. Interpretarea exactă rămâne de confirmat.
+
 ## Module și limite
 
 | Modul | Responsabilitate și contract |

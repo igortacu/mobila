@@ -24,9 +24,12 @@ export function checkWalkway(room: RoomModel, pieces: Footprint[], minimumMm = 6
   const bed = pieces.find(piece => piece.id === 'bed');
   if (!bed) return [];
   const bounds = footprintBounds(bed);
-  return ([['stânga', Math.round(bounds.left)], ['dreapta', Math.round(room.widthMm - bounds.right)]] as const)
-    .filter(([, gap]) => gap >= 0 && gap < minimumMm)
-    .map(([side, gap]) => ({ id: `walkway-${side}`, severity: 'warning' as const, amountMm: gap, text: `Culoarul din ${side} patului are ${gap} mm, sub pragul de ${minimumMm} mm.` }));
+  const sideGaps = Math.abs(Math.cos(bed.rotationRad)) >= Math.abs(Math.sin(bed.rotationRad))
+    ? [['left', 'în stânga', Math.round(bounds.left)], ['right', 'în dreapta', Math.round(room.widthMm - bounds.right)]] as const
+    : [['arch', 'spre arcadă', Math.round(bounds.near)], ['door', 'spre ușă', Math.round(room.lengthMm - bounds.far)]] as const;
+  return sideGaps
+    .filter(([, , gap]) => gap >= 0 && gap < minimumMm)
+    .map(([id, side, gap]) => ({ id: `walkway-${id}`, severity: 'warning' as const, amountMm: gap, text: `Culoarul de lângă pat, ${side}, are ${gap} mm, sub pragul de ${minimumMm} mm.` }));
 }
 
 export function checkOverlaps(pieces: Footprint[]): FitWarning[] {

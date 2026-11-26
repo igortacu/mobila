@@ -4,6 +4,7 @@ import { listProjects, loadProject, saveProject, type StudioFurniturePlacement, 
 import { sunDirection } from './lighting/sun';
 import type { Facing } from './lighting/sun';
 import { importCapturedRoom } from './roomplan';
+import { sampleFurniture } from './sample-layout';
 import './style.css';
 
 const el = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
@@ -17,13 +18,6 @@ const featureList = el<HTMLElement>('feature-list');
 let room: RoomModel = createRectangleRoom({ widthMm: 2840, lengthMm: 4005, heightMm: 2632, archOffsetMm: 738, archWidthMm: 1310, doorOffsetMm: 1934, doorWidthMm: 824 });
 const viewer = mountViewer(el<HTMLElement>('stage'), room);
 
-const samples: StudioFurniturePlacement[] = [
-  { id: 'wardrobe', kind: 'wardrobe', xMm: 850, zMm: 3660, rotationRad: Math.PI },
-  { id: 'bed', kind: 'bed', xMm: 1400, zMm: 1550, rotationRad: 0 },
-  { id: 'nightstand-1', kind: 'nightstand', xMm: 230, zMm: 650, rotationRad: 0 },
-  { id: 'nightstand-2', kind: 'nightstand', xMm: 2570, zMm: 750, rotationRad: 0 },
-  { id: 'vanity', kind: 'vanity', xMm: 2440, zMm: 320, rotationRad: 0 },
-];
 let furniture: StudioFurniturePlacement[] = [];
 let currentProjectId: string | undefined;
 
@@ -165,17 +159,18 @@ function renderFurnitureEditor(): void {
     title.textContent = `${names[piece.kind]} · ${piece.id}`;
     const fields = document.createElement('div');
     fields.className = 'dims';
-    for (const [key, label, value] of [['xMm', 'X (mm)', piece.xMm], ['zMm', 'Z (mm)', piece.zMm], ['rotationRad', 'Rotire (°)', Math.round(piece.rotationRad * 180 / Math.PI)]] as const) {
+    for (const [key, label, value] of [['xMm', 'X (mm)', piece.xMm], ['zMm', 'Z (mm)', piece.zMm], ['rotationRad', 'Rotire (°)', Math.round(piece.rotationRad * 180 / Math.PI)], ['elevationMm', 'De la podea (mm)', piece.elevationMm ?? 0]] as const) {
       const wrapper = document.createElement('label');
       wrapper.textContent = label;
       const input = document.createElement('input');
       input.type = 'number';
       input.step = key === 'rotationRad' ? '5' : '10';
+      if (key === 'elevationMm') input.min = '0';
       input.value = String(value);
       input.addEventListener('input', () => {
         if (input.value.trim() === '') return;
         const next = Number(input.value);
-        if (!Number.isFinite(next)) { showError('Poziția piesei trebuie să fie numerică.'); return; }
+        if (!Number.isFinite(next) || key === 'elevationMm' && next < 0) { showError('Poziția piesei trebuie să fie numerică, iar cota de la podea nu poate fi negativă.'); return; }
         if (key === 'rotationRad') piece.rotationRad = next * Math.PI / 180;
         else piece[key] = next;
         if (piece.wallAnchor) piece.wallAnchor = captureWallAnchor(room, piece, piece.wallAnchor.wallId);
@@ -290,7 +285,7 @@ function updateFurnitureState(): void {
 }
 el<HTMLSelectElement>('wardrobe-door').addEventListener('change', updateFurnitureState);
 el<HTMLInputElement>('bed-lift').addEventListener('change', updateFurnitureState);
-el<HTMLButtonElement>('samples').addEventListener('click', () => { furniture = samples.map(piece => ({ ...piece })); viewer.setFurniture(furniture); updateFurnitureState(); renderFurnitureEditor(); updateChecks(); });
+el<HTMLButtonElement>('samples').addEventListener('click', () => { furniture = sampleFurniture.map(piece => ({ ...piece })); viewer.setFurniture(furniture); updateFurnitureState(); renderFurnitureEditor(); updateChecks(); });
 el<HTMLSelectElement>('hinge').addEventListener('change', updateChecks);
 el<HTMLButtonElement>('new-project').addEventListener('click', () => {
   currentProjectId = undefined;

@@ -9,7 +9,7 @@ it('exports only viewer data and precomputed sunlight', () => {
   const project: StudioProject = {
     id: 'local-only', name: 'Dormitorul nou',
     room: { ...room, metadata: { gps: 'secret-location' } } as typeof room,
-    furniture: [{ id: 'bed', kind: 'bed', xMm: 1400, zMm: 1550, rotationRad: 0 }],
+    furniture: [{ id: 'vanity', kind: 'vanity', xMm: 2440, zMm: 320, rotationRad: 0, elevationMm: 500 }],
     lighting: { hour: 15, season: 'summer', facing: 'S', sky: 'clear' },
     finishes: { walls: 'satin', floor: 'walnut' },
     furnitureState: { wardrobeDoor: 'left', bedLifted: true },
@@ -20,6 +20,7 @@ it('exports only viewer data and precomputed sunlight', () => {
   expect(payload.sunDirections.winter).toHaveLength(19);
   expect(payload.furnitureState).toEqual({ wardrobeDoor: 'left', bedLifted: true });
   expect(payload.finishes).toEqual({ walls: 'satin', floor: 'walnut' });
+  expect(payload.furniture[0].elevationMm).toBe(500);
   expect(JSON.stringify(payload)).not.toMatch(/gps|secret-location|controlMeasurements|47\.02|28\.86/);
   expect(payload.room.measurementStatus).toBe('estimated');
 });

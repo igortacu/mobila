@@ -1,10 +1,12 @@
 # Parcursul demonstrației M-DEMO
 
-> **Problemă cunoscută:** patul este amplasat greșit în scenă. Mecanismul de ridicare este demonstrativ; plasamentul nu este aprobat. Vezi [STATUS.md](STATUS.md).
+> **Actualizare 26 noiembrie:** patul a fost mutat pe peretele de lângă dulap; verifică poziția și culoarul de 440 mm pe plan și cu ruleta înainte de montaj. Vezi [STATUS.md](STATUS.md).
 
 ![Dulapul deschis în pagina găzduită](client-live.jpg)
 
 ![Somiera ridicată și lada patului](client-bed-open.jpg)
+
+![Masa de toaletă ridicată cu 500 mm](client-vanity-raised.jpg)
 
 1. Pornește Studio cu `npm run dev` și importă `reference/captured-room.json`. Arată dimensiunile rezultate și faptul că scanarea incompletă din `reference/fixtures/captured-room-partial.json` este respinsă explicit.
 2. Încarcă mostrele comenzii. Scena conține dulapul, patul, două noptiere și masa de toaletă; comoda scoasă din comandă nu apare. Deschide separat stânga și dreapta dulapului, apoi ridică somiera pentru lada compartimentată. Lățimile coloanelor și numărul compartimentelor sunt ilustrative.

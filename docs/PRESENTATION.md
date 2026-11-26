@@ -1,10 +1,12 @@
 # Prezentarea din 24 noiembrie 2026
 
-> **Problemă cunoscută:** poziția patului în cameră este greșită și nu a fost aprobată. Pagina de mai jos demonstrează ridicarea somierei, dar nu reprezintă un plan corect de amplasare. Vezi [STATUS.md](STATUS.md).
+> **Actualizare 26 noiembrie:** patul a fost mutat pe peretele de lângă dulap. Poziția și culoarul de 440 mm sunt orientative până la confirmarea pe plan și cu ruleta. Vezi [STATUS.md](STATUS.md).
 
 ![Dulapul deschis în pagina găzduită](client-live.jpg)
 
 ![Patul ridicat cu lada de depozitare vizibilă](client-bed-open.jpg)
+
+![Masa de toaletă ridicată cu 500 mm în versiunea actuală](client-vanity-raised.jpg)
 
 ## Deschidere rapidă
 

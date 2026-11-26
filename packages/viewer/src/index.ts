@@ -7,6 +7,7 @@ export interface FurniturePlacement {
   xMm: number;
   zMm: number;
   rotationRad: number;
+  elevationMm?: number;
 }
 
 export interface SunDirection {
@@ -206,7 +207,7 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
       box(group, 0.012, 1.2, 0.012, -0.385, 0.825, -d / 2 + 0.035, ledMaterial);
       box(group, 0.012, 1.2, 0.012, 0.235, 0.825, -d / 2 + 0.035, ledMaterial);
     }
-    group.position.set(toM(piece.xMm), 0, toM(piece.zMm));
+    group.position.set(toM(piece.xMm), toM(piece.elevationMm ?? 0), toM(piece.zMm));
     group.rotation.y = piece.rotationRad;
     return group;
   }
@@ -221,7 +222,7 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
     for (const piece of pieces) furnitureGroup.add(buildPiece(piece));
     scene.add(furnitureGroup);
     const vanity = pieces.find(piece => piece.kind === 'vanity');
-    if (vanity) ledLight.position.set(toM(vanity.xMm), 1.1, toM(vanity.zMm));
+    if (vanity) ledLight.position.set(toM(vanity.xMm), 1.1 + toM(vanity.elevationMm ?? 0), toM(vanity.zMm));
     setWardrobeDoor(wardrobeDoorState);
     setBedLift(bedLifted);
     render();
@@ -270,14 +271,18 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
     const w = toM(room.widthMm), l = toM(room.lengthMm);
     camera.fov = 50;
     camera.updateProjectionMatrix();
+    const bed = furnitureGroup.children.find(piece => piece.userData.kind === 'bed');
+    const wardrobe = furnitureGroup.children.find(piece => piece.userData.kind === 'wardrobe');
     if (view === 'top') camera.position.set(w * 0.5, 6.2, l * 0.6);
     else if (view === 'door') camera.position.set(w * 0.7, 1.6, l + 1.5);
+    else if (view === 'bed' && bed) camera.position.set(bed.position.x - Math.sin(bed.rotation.y) * 0.48, 1.3, bed.position.z - Math.cos(bed.rotation.y) * 0.48);
     else if (view === 'bed') camera.position.set(-1.1, 1.6, l * 0.35);
     else if (view === 'wardrobe') camera.position.set(w * 0.64, 1.65, -0.35);
     else camera.position.set(w - 0.2, 1.6, l * 0.6);
     const vanity = view === 'mirror' ? furnitureGroup.children.find(piece => piece.userData.kind === 'vanity') : undefined;
-    if (view === 'wardrobe') lookTarget.set(w * 0.3, 1.35, l * 0.9);
-    else if (view === 'mirror') lookTarget.set(vanity?.position.x ?? w * 0.86, 1.05, vanity?.position.z ?? 0.32);
+    if (view === 'wardrobe') lookTarget.set(wardrobe?.position.x ?? w * 0.3, 1.35, wardrobe?.position.z ?? l * 0.9);
+    else if (view === 'bed' && bed) lookTarget.set(bed.position.x + Math.sin(bed.rotation.y) * 1.5, 1.15, bed.position.z + Math.cos(bed.rotation.y) * 1.5);
+    else if (view === 'mirror') lookTarget.set(vanity?.position.x ?? w * 0.86, 1.05 + (vanity?.position.y ?? 0), vanity?.position.z ?? 0.32);
     else lookTarget.set(w * 0.5, 0.6, l * 0.45);
     camera.lookAt(lookTarget);
     render();
@@ -373,16 +378,18 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
       const before = Math.hypot(previous.x - other.x, previous.y - other.y);
       const after = Math.hypot(event.clientX - other.x, event.clientY - other.y);
       if (before > 0 && after > 0) {
-        camera.fov = THREE.MathUtils.clamp(camera.fov * before / after, 25, 75);
-        camera.updateProjectionMatrix();
+        const offset = camera.position.clone().sub(lookTarget).multiplyScalar(before / after);
+        offset.clampLength(0.6, 15);
+        camera.position.copy(lookTarget).add(offset);
+        camera.lookAt(lookTarget);
         render();
       }
       return;
     }
-    const spherical = new THREE.Spherical().setFromVector3(lookTarget.clone().sub(camera.position));
+    const spherical = new THREE.Spherical().setFromVector3(camera.position.clone().sub(lookTarget));
     spherical.theta -= dx * 0.004;
-    spherical.phi = THREE.MathUtils.clamp(spherical.phi - dy * 0.004, 0.08, Math.PI - 0.08);
-    lookTarget.copy(camera.position).add(new THREE.Vector3().setFromSpherical(spherical));
+    spherical.phi = THREE.MathUtils.clamp(spherical.phi - dy * 0.004, 0.08, Math.PI / 2 + 0.08);
+    camera.position.copy(lookTarget).add(new THREE.Vector3().setFromSpherical(spherical));
     camera.lookAt(lookTarget);
     render();
   });
@@ -391,8 +398,10 @@ export function mountViewer(container: HTMLElement, initialRoom: RoomModel): Vie
   renderer.domElement.addEventListener('pointercancel', endDrag);
   renderer.domElement.addEventListener('wheel', event => {
     event.preventDefault();
-    camera.fov = THREE.MathUtils.clamp(camera.fov * Math.exp(event.deltaY * 0.001), 25, 75);
-    camera.updateProjectionMatrix();
+    const offset = camera.position.clone().sub(lookTarget).multiplyScalar(Math.exp(event.deltaY * 0.001));
+    offset.clampLength(0.6, 15);
+    camera.position.copy(lookTarget).add(offset);
+    camera.lookAt(lookTarget);
     render();
   }, { passive: false });
 

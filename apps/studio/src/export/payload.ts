@@ -35,7 +35,7 @@ export function createClientPayload(project: StudioProject): ClientPayload {
   return {
     title: project.name,
     room,
-    furniture: project.furniture.map(item => ({ id: item.id, kind: item.kind, xMm: item.xMm, zMm: item.zMm, rotationRad: item.rotationRad })),
+    furniture: project.furniture.map(item => ({ id: item.id, kind: item.kind, xMm: item.xMm, zMm: item.zMm, rotationRad: item.rotationRad, ...(item.elevationMm === undefined ? {} : { elevationMm: item.elevationMm }) })),
     colors: project.colors ?? { walls: '#ddd6ca', ceiling: '#f4f1eb' },
     finishes: project.finishes ?? { walls: 'matte', floor: 'oak' },
     lighting: { hour: project.lighting.hour, season: project.lighting.season, sky: project.lighting.sky, lamp: project.lighting.lamp ?? 'auto', kelvin: project.lighting.kelvin ?? 3000, led: project.lighting.led ?? false },
